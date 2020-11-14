@@ -1,12 +1,13 @@
 from flask import Flask, render_template, jsonify
 import requests
 import re
+from pymongo import MongoClient
 
 app = Flask(__name__)
 
 
-# client = MongoClient('localhost', 27017)  # mongoDB는 27017 포트로 돌아갑니다.
-# db = client.dbsparta
+client = MongoClient('localhost', 27017)  # mongoDB는 27017 포트로 돌아갑니다.
+db = client.myproject
 
 
 @app.route('/')
@@ -17,13 +18,17 @@ def home():
 def my_page():
     return 'This is My Page!'
 
+@app.route('/post')
+def post_page():
+    return render_template('post.html')
+
 @app.route('/review', methods=['GET'])
 def read_reviews():
     return jsonify({'result': 'success', 'msg': '이 요청은 GET!'})
 
 
 @app.route('/review', methods=['POST'])
-def write_review(request):
+def write_review():
     # title_receive로 클라이언트가 준 title 가져오기
     registration_receive = requests.data['registration_give']  #
     company_receive = requests.data['company_give']
